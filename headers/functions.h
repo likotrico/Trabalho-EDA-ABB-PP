@@ -5,7 +5,9 @@
 
 node* search_node(int, int, node*);
 void search(int, int, tree*); 
-void print_node(int, node* ); //FUNÇÃO OBSOLETA
+node* find_mod(node *, int, type_field);
+void print_order(node *, int);
+void print_tree(tree*, int);
 
 void mod_overflow_UP(node*, node*, node*);
 void mod_overflow_DOWN(node*, node*, node*);

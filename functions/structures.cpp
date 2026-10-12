@@ -38,6 +38,6 @@ node* create_node(int value){
         n->mods[i].value = -1;
         n->mods[i].field = EMPTY;
     }
-    printf("node with value %d successfully created\n",value);
+    //printf("node with value %d successfully created\n",value);
     return n;
 }

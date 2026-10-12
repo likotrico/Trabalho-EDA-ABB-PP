@@ -4,7 +4,7 @@
 int number_p = 1;
 int next_id = 0;
 int version = 0;
-int maximum_versions = 50;
+int maximum_versions = 1001;
 
 enum type_field{
     EMPTY,
@@ -16,7 +16,7 @@ enum type_field{
 struct internal_info{
     int version;
     int value;
-    int field;
+    type_field field;
 } ;
 
 struct node{ 
