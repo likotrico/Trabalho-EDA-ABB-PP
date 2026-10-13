@@ -1,0 +1,4 @@
+INC,10
+REM,5
+SUC,2 2
+IMP,4

@@ -4,13 +4,13 @@
 #include "functions/functions.cpp"
 #include "functions/structures.cpp"
 
-int main(){
+int main(int argc, char *argv[]){
     printf("\n");
 
     node *n;
     tree *tr = create_tree();
     
-    //insert_node(3, tr);
+    /*//insert_node(3, tr);
     //insert_node(1, tr);
     
     insert_node(10, tr);
@@ -23,8 +23,9 @@ int main(){
     insert_node(16, tr);
     
     search(16, 7, tr);
-    print_tree(tr, 7);
+    print_tree(tr, 7);*/
 
+    fclose(file);
     printf("\n");
     printf("END OF EXECUTION!");
     printf("\n");
