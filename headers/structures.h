@@ -13,11 +13,13 @@ enum type_field{
     R_SON
 };
 
+struct node;
+
 struct internal_info{
     int version;
-    int value;
+    node *value;
     type_field field;
-} ;
+};
 
 struct node{ 
     int value;
@@ -33,7 +35,7 @@ struct tree{
 };
 
 tree* create_tree();
-internal_info create_field(int, type_field);
+internal_info create_field(node*, type_field);
 node* create_node(int );
 
 #endif

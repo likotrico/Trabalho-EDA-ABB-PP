@@ -16,6 +16,7 @@ int main(){
     insert_node(10, tr);
     insert_node(5, tr);
     insert_node(15, tr);
+    //printf("AAAAA\n");
     insert_node(4, tr);
     insert_node(6, tr);
     insert_node(14, tr);

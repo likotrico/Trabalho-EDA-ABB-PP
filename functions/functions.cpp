@@ -1,4 +1,7 @@
 #include <stdio.h>
+#include <stdint.h>
+
+#include <cstdint>
 
 #include "../headers/functions.h"
 
@@ -12,7 +15,7 @@ node* search_node(int value, int version_req, node* current_node){
         printf("The node %d don't exist in the tree in version %d!\n", value, version_req);
         return NULL;
     }
-    if(current_node->value == value) return no;
+    if(current_node->value == value) return current_node;
     if(current_node->value > value){
         //node *address = find_mod(no, version_req, L_SON);
         return search_node(value, version_req, find_mod(current_node, version_req, L_SON));
@@ -44,6 +47,8 @@ node* find_mod(node *current_node, int version_req, type_field field){
             printf("%d == %d\n", current_node->mods[i].field, L_SON);*/
             if((current_node->mods[i].version <= version_req) && (current_node->mods[i].field == L_SON)){
                 target = (node *)current_node->mods[i].value;
+                //target = reinterpret_cast<uintptr_t>(current_node->mods[i].value);
+                
             }
         }
         //if(target != NULL) printf("Para o no %d o seu filho mais recente e %d\n", current_node->value, target->value);
@@ -92,8 +97,8 @@ void print_tree(tree* current_tree, int version_req){
 void mod_overflow_UP(node* current_node, node* new_node, node* old_node){
     //encontrar o campo que o current_node está 
     //adicionar a modificação do campo encontrado com a informação do new_node
-    if(current_node->l_son == old_node) add_mod(current_node, (int)new_node, L_SON);
-    if(current_node->r_son == old_node) add_mod(current_node, (int)new_node, R_SON);
+    if(current_node->l_son == old_node) add_mod(current_node, new_node, L_SON);
+    if(current_node->r_son == old_node) add_mod(current_node, new_node, R_SON);
 }
 
 void mod_overflow_DOWN(node* current_node, node* new_node, node* old_node){
@@ -117,7 +122,7 @@ node* clone_node(node *current_node){ //CLONO UM NÓ COM AS MODIFICAÇÕES VAZIA
     return novo_no;
 }
 
-void add_mod(node *current_node, int value, type_field field){
+void add_mod(node *current_node, node *value, type_field field){
     //VERIFICANDO SE HÁ ESPAÇOS
     int i;
     //printf("valor: %d", current_node->value);
@@ -128,17 +133,14 @@ void add_mod(node *current_node, int value, type_field field){
         if(current_node->mods[i].field == EMPTY) {/*printf("entrou aqui?\n");*/break;}
     }
     //SE HÁ ESPAÇO NOS MODS
-    
     if(i<2*number_p) current_node->mods[i] = create_field(value, field);
     
     //SE NÃO HÁ ESPAÇO NOS MODS (i = 2*number_p)
-    else{
-        //printf("VALOR DE i: %d\n", i);
-        //printf("CHEGOU SEXO\n");
+    else{//CHEGOU SEXO\n
         //criar novo nó com a informação da modificação
         node *new_node = clone_node(current_node);
-        if(field == L_SON) new_node->l_son = (node*)value;
-        else if(field == R_SON) new_node->r_son = (node*)value;
+        if(field == L_SON) new_node->l_son = value;
+        else if(field == R_SON) new_node->r_son = value;
 
         //avisar para quem aponta para o novo nó que ele é o da nova versão
         for(i = 0; i < number_p; i++){
@@ -153,15 +155,23 @@ void add_mod(node *current_node, int value, type_field field){
 
 void insert(node *current_node, node *root){
     node *aux;
+    //printf("%d\n", root->value);
+    //printf("%d\n", root->value);
     if(current_node->value <= root->value){
+        //printf("BBBBBBB\n");
+        //printf("%d\n", root->value);
         aux = find_mod(root, version, L_SON);
+        /*if(aux == NULL){
+            printf("aux NULL\n");
+        }else printf("aux diff NULL\n");*/
+        //printf("%d\n", aux->value);
         if(aux == NULL){
             current_node->return_pointers[0] = root;
             /*printf("\nAntes de entrar no add_mod\n");
             printf("%d\n", current_node->mods[0].field);
-            printf("%d\n", current_node->mods[1].field);
-            printf("%d\n");*/
-            add_mod(root, (int)current_node ,L_SON);
+            printf("%d\n", current_node->mods[1].field);*/
+            //printf("%d\n");
+            add_mod(root, current_node ,L_SON);
         }
         else insert(current_node, aux);   
     }
@@ -169,7 +179,7 @@ void insert(node *current_node, node *root){
         aux = find_mod(root, version, R_SON);
         if(aux == NULL){
             current_node->return_pointers[0] = root;
-            add_mod(root, (int)current_node ,R_SON);
+            add_mod(root, current_node ,R_SON);
         }
         else insert(current_node, aux);
     }
@@ -182,8 +192,8 @@ void insert_node(int value, tree *t){
     else{
         node *n = create_node(value);
         t->vector_of_roots[version+1] = t->vector_of_roots[version];
-        //printf("NO VALUE: %d\n", n->value);
-        //printf("querendo inserir na versao: %d\n", version+1);
+        printf("NO VALUE: %d\n", n->value);
+        printf("querendo inserir na versao: %d\n", version+1);
         
         //INSERINDO A RAIZ
         if(t->vector_of_roots[version+1] == NULL){
@@ -191,10 +201,11 @@ void insert_node(int value, tree *t){
         }
         //INSERINDO UM NÃO RAIZ
         else{
+            
             insert(n, t->vector_of_roots[version+1]);
         }
         version++;
-        //printf("node with value %d was sucessfully added in version %d\n", value, version);
+            printf("node with value %d was sucessfully added in version %d\n", value, version);
     }
 }
 

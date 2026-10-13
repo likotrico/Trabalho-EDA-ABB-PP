@@ -10,7 +10,7 @@ tree* create_tree(){
     return t;
 }
 
-internal_info create_field(int value, type_field field){
+internal_info create_field(node *value, type_field field){
     // = (internal_info*)malloc(sizeof(internal_info));
     internal_info f;
     f.version = version+1;
@@ -35,7 +35,7 @@ node* create_node(int value){
     n->mods = (internal_info*)malloc(sizeof(internal_info)*2*number_p);
     for(i=0; i<2*number_p;i++){
         n->mods[i].version = -1;
-        n->mods[i].value = -1;
+        n->mods[i].value = NULL;
         n->mods[i].field = EMPTY;
     }
     //printf("node with value %d successfully created\n",value);
