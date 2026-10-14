@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdint.h>
+#include <iostream>
 
 #include <cstdint>
 
@@ -79,7 +80,8 @@ void print_order(node *current_node, int version_req){
 
         //if(current_node->l_son != NULL) printf("%d, ", );
         print_order(left_son, version_req);
-        printf("%d, ", current_node->value);
+        //printf("%d, ", current_node->value);
+        queue.push_back(current_node->value);
         print_order(right_son, version_req);
     }
 }
@@ -90,6 +92,18 @@ void print_tree(tree* current_tree, int version_req){
     else if(version_req > version) printf("Trying print version %d, but the maximum version is %d\n", version_req, version);
     else{
         print_order(current_tree->vector_of_roots[version_req], version_req);
+        //printf("Tamanho da fila %ld\n", queue.size());
+        int i;
+        //printf("size:%ld\n", queue.size());
+        for(i=0; i<queue.size(); i++){
+            //aux = queue.erase(queue.begin())
+            //printf("size:%ld\n", queue.size());
+            /*if(queue.size() == 1) printf("%d", *queue.erase(queue.begin()));
+            else printf("%d, ", *queue.erase(queue.begin()));*/
+            if(i == queue.size()-1) printf("%d", queue[i]);
+            else printf("%d, ", queue[i]);
+        }
+        queue.clear();
         printf("\n");
     }
 }
@@ -209,10 +223,52 @@ void insert_node(int value, tree *t){
     }
 }
 
+node* find_strictly_greater(int value, int version_req, node *current_node){
+    if(current_node == NULL) return NULL;//ver o cenário que retorna int e aqui retorna -1 para sinalizar que o sucessor não existe
+}
+
+node* successor(int value, int version_req, tree *current_tree){
+    if(current_tree == NULL || value <= 0 || version_req < 0 || version_req > version){
+        printf("Invalid Entry!\n");
+        return NULL;
+    }
+    else{
+        node *aux;
+        //aux = search_node(value, version_req, current_tree->vector_of_roots[version_req]);
+        aux = current_tree->vector_of_roots[version_req];
+        
+        //raiz nula(falta tratar a situação que ocorre essa saída)
+        if(aux == NULL) return NULL;
+        //procurando o elemento com o value passado na estrutura
+        while(aux != NULL){
+            //o elemento de valor value existe na estrutura
+            if(aux->value == value) return find_strictly_greater(value, version_req, aux);
+            //o elemento de valor value não existe na estrutura
+            if(aux->l_son != NULL){
+                if(aux->l_son->value < value) return aux;
+                //atualizando o nó analisado na estrutura
+                //o valor é menor que o valor do nó atual
+                if(value < aux->value) aux = aux->l_son;
+                //o valor é maior que o valor do nó atual
+                else{
+                    if(aux->r_son != NULL){
+                        aux = aux->r_son;
+                    }
+                }
+            }
+            else if(aux->r_son != NULL){
+
+            }
+            else return NULL
+            
+            
+            
+        }
+        //se chegou aqui é porque 
+        return NULL;
+    }
+}
+
 /*int remove(){
-
-}*/
-
-/*int successor(){
 
 }*/

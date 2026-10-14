@@ -1,5 +1,10 @@
 #include "../headers/structures.h"
 
+/*int* create_queue(){
+    int *queue = (int*)malloc(sizeof(int)*maximum_versions);
+    return queue;
+}*/
+
 tree* create_tree(){
     tree* t = (tree*)malloc(sizeof(tree));
     int i;

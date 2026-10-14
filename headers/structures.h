@@ -1,10 +1,13 @@
 #ifndef STRUCTURES_H
 #define STRUCTURES_H
 
+#include <vector>
 int number_p = 1;
 int next_id = 0;
 int version = 0;
 int maximum_versions = 1001;
+std::vector<int> queue;
+//int *queue=(int*)malloc(sizeof(int)*1001);
 
 enum type_field{
     EMPTY,
@@ -37,5 +40,6 @@ struct tree{
 tree* create_tree();
 internal_info create_field(node*, type_field);
 node* create_node(int );
+//int* create_queue();
 
 #endif
