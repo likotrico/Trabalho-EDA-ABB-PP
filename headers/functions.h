@@ -16,10 +16,9 @@ void add_mod(node*, node* , type_field );
 void insert(node*, node*);
 void insert_node(int, tree*);
 
-
-
-
-
+node* find_strictly_greater(int, int, node*);
+int node_is_leaf(node*, int);
+node* successor(int, int, tree*);
 
 
 #endif

@@ -225,47 +225,64 @@ void insert_node(int value, tree *t){
 
 node* find_strictly_greater(int value, int version_req, node *current_node){
     if(current_node == NULL) return NULL;//ver o cenário que retorna int e aqui retorna -1 para sinalizar que o sucessor não existe
+    node *current_l_son = find_mod(current_node, version_req, L_SON);//filho mais atualizado na versão requerida
+    if(current_l_son == NULL) return current_node; //caso em que chegamos no sucessor
+    return find_strictly_greater(value, version_req, current_l_son); //caso em que ainda não chegamos no elementos mais a esquerda
+}
+
+int node_is_leaf(node *current_node, int version_req){
+    node *left_son = find_mod(current_node, version_req, L_SON);
+    node *right_son = find_mod(current_node, version_req, R_SON);
+    if(left_son == NULL && right_son == NULL) return 1;
+    return 0;
 }
 
 node* successor(int value, int version_req, tree *current_tree){
+    //VERIFICANDO SE AS ENTRADAS ESTÃO CORRETAS
+    
     if(current_tree == NULL || value <= 0 || version_req < 0 || version_req > version){
         printf("Invalid Entry!\n");
         return NULL;
     }
     else{
-        node *aux;
-        //aux = search_node(value, version_req, current_tree->vector_of_roots[version_req]);
+        node *aux, *aux_lson, *aux_rson, *last_left;
         aux = current_tree->vector_of_roots[version_req];
+        last_left = NULL;
         
         //raiz nula(falta tratar a situação que ocorre essa saída)
         if(aux == NULL) return NULL;
         //procurando o elemento com o value passado na estrutura
         while(aux != NULL){
+            aux_lson = find_mod(aux, version_req, L_SON);//pegando o filho direito mais atualizado na versão requerida
+            aux_rson = find_mod(aux, version_req, R_SON);//pegando o filho direito mais atualizado na versão requerida
+            
+            /*printf("aux: %d\n", aux->value);
+            if(aux_lson != NULL) printf("aux_lson: %d\n", aux_lson->value);
+            else printf("aux_lson: NULL\n");
+            if(aux_rson != NULL) printf("aux_rson: %d\n", aux_rson->value);
+            else printf("aux_rson: NULL\n");*/
+
             //o elemento de valor value existe na estrutura
-            if(aux->value == value) return find_strictly_greater(value, version_req, aux);
-            //o elemento de valor value não existe na estrutura
-            if(aux->l_son != NULL){
-                if(aux->l_son->value < value) return aux;
-                //atualizando o nó analisado na estrutura
-                //o valor é menor que o valor do nó atual
-                if(value < aux->value) aux = aux->l_son;
-                //o valor é maior que o valor do nó atual
+            if(aux->value == value){
+                //caso elemento é folha
+                if(node_is_leaf(aux, version_req)) return last_left;
+                //caso elemento não é folha
                 else{
-                    if(aux->r_son != NULL){
-                        aux = aux->r_son;
-                    }
+                    //caso filho direito é nulo
+                    if(aux_rson == NULL) return last_left;
+                    //caso filho direito não é nulo
+                    else return find_strictly_greater(value, version_req, aux_rson);//encontrando o cara mais a esquerda da subarvore direita de aux
                 }
             }
-            else if(aux->r_son != NULL){
-
+            //atualizando o nó analisado na estrutura
+            if(value <= aux->value){
+                last_left = aux;
+                aux = aux_lson;
             }
-            else return NULL
-            
-            
-            
+            else aux = aux_rson;      
         }
-        //se chegou aqui é porque 
-        return NULL;
+        //caso o elemento não exista na estrutura
+        return last_left;
     }
 }
 
