@@ -33,7 +33,7 @@ int main(int argc, char *argv[]){
 
     n = successor(10, 2, tr);
     if(n != NULL) printf("sucessor: %d\n", n->value);
-    else printf("sucessor: NULL\n");
+    else printf("sucessor: diff\n");
 
     printf("\n");
     printf("END OF EXECUTION!");
