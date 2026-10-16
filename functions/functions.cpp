@@ -22,7 +22,7 @@ node* search_node(int value, int version_req, node* current_node){
         return search_node(value, version_req, find_mod(current_node, version_req, L_SON));
     }
     //node *address = find_mod(no, version_req, L_SON);
-    return search_node(value, version_req, find_mod(current_node, version_req, L_SON));
+    return search_node(value, version_req, find_mod(current_node, version_req, R_SON));
 }
 
 void search(int value, int version_req, tree *t){
@@ -111,6 +111,8 @@ void print_tree(tree* current_tree, int version_req){
 void mod_overflow_UP(node* current_node, node* new_node, node* old_node){
     //encontrar o campo que o current_node está 
     //adicionar a modificação do campo encontrado com a informação do new_node
+
+    //TEM QUE COLOCAR PARA PROCURAR O FILHO NA ÚLTIMA VERSÃO PARA VERIFICAR A CONDIÇÃO DO IF
     if(current_node->l_son == old_node) add_mod(current_node, new_node, L_SON);
     if(current_node->r_son == old_node) add_mod(current_node, new_node, R_SON);
 }
@@ -141,6 +143,7 @@ void add_mod(node *current_node, node *value, type_field field){
     int i;
     //printf("valor: %d", current_node->value);
     for(i=0 ; i<2*number_p ; i++){
+    //for(i=0 ; i<4 ; i++){
         //printf("valor i no loop: %d\n", i);
         //printf("current node %d\n",current_node->mods[i].field);
         //printf("EMPTY %d\n",EMPTY);
@@ -148,9 +151,11 @@ void add_mod(node *current_node, node *value, type_field field){
     }
     //SE HÁ ESPAÇO NOS MODS
     if(i<2*number_p) current_node->mods[i] = create_field(value, field);
+    //if(i<4) current_node->mods[i] = create_field(value, field);
     
     //SE NÃO HÁ ESPAÇO NOS MODS (i = 2*number_p)
     else{//CHEGOU SEXO\n
+        printf("NAO TEM ESPAÇO\n");
         //criar novo nó com a informação da modificação
         node *new_node = clone_node(current_node);
         if(field == L_SON) new_node->l_son = value;
@@ -237,6 +242,14 @@ int node_is_leaf(node *current_node, int version_req){
     return 0;
 }
 
+int node_have_only_one_son(node *current_node, int version_req){
+    node *left_son = find_mod(current_node, version_req, L_SON);
+    node *right_son = find_mod(current_node, version_req, R_SON);
+    if(left_son == NULL && right_son != NULL) return 1;
+    if(left_son != NULL && right_son == NULL) return 1;
+    return 0;
+}
+
 node* successor(int value, int version_req, tree *current_tree){
     //VERIFICANDO SE AS ENTRADAS ESTÃO CORRETAS
     
@@ -286,6 +299,156 @@ node* successor(int value, int version_req, tree *current_tree){
     }
 }
 
-/*int remove(){
+void remove_leaf(node *father, node *removed_node){
+    //verificar qual filho na versão mais atualizada o nó removido é igual
+    node *father_lson = find_mod(father, version, L_SON); //find_mod(node *current_node, int version, type_field field)
+    //node *current_node_rson = find_mod(current_node, version, R_SON);
+    //adicionar a modificação no campo que o filho foi removido
+    if((father_lson != NULL)&&(father_lson->value == removed_node->value)){
+        add_mod(father, NULL, L_SON);
+    }
+    else{
+        add_mod(father, NULL, R_SON);
+    }
+}
 
-}*/
+void remove_OS_signal(node *father, node *removed_node, node *son){
+    node *father_lson = find_mod(father, version, L_SON);
+    if(father_lson->value == removed_node->value){
+        add_mod(father, son, L_SON);
+    }
+    else{
+        add_mod(father, son, R_SON);
+    }
+    son->return_pointers[0] = father;
+}
+
+void remove_node_with_one_son(node *removed_node){
+    node *father = removed_node->return_pointers[0];
+    node *son = find_mod(removed_node, version, L_SON);
+    if(son != NULL){
+        remove_OS_signal(father, removed_node, son);
+    }
+    else{
+        son = find_mod(removed_node, version, R_SON);
+        remove_OS_signal(father, removed_node, son);
+    }
+}
+
+void remove(int value, tree *current_tree){
+    if(current_tree == NULL || value <= 0 ){
+        printf("Invalid Entry!\n");
+    }
+    else{
+        node *inicial_root = current_tree->vector_of_roots[version];
+        printf("node:%d\n", value);
+        node *n = search_node(value, version, current_tree->vector_of_roots[version]);
+        int n_is_lson_of_his_father = 0;
+        int n_is_rson_of_his_father = 0;
+
+        //caso o elemento exista na estrutura
+        if(n != NULL){
+            node *father_n = n->return_pointers[0];
+            //caso o elemento é uma folha
+            if(node_is_leaf(n, version)){
+                
+                if(n->value == inicial_root->value){ //raiz folha
+                    current_tree->vector_of_roots[version+1] = NULL;
+                }
+                else{
+                    
+                    printf("father_n:%d\n", father_n->value);
+                    remove_leaf(father_n, n);
+                    current_tree->vector_of_roots[version+1] = inicial_root;
+                    printf("Node %d was removed in version %d!\n", n->value, version+1);
+                }
+            }
+            //caso o elemento não é folha
+            else{
+                //caso o elemento tem apenas um filho
+                if(node_have_only_one_son(n, version)){
+                    if(n->value == inicial_root->value){ //raiz com 1 filho
+                        node *aux = find_mod(n, version, L_SON);
+                        if(aux != NULL){
+                            aux->return_pointers[0] = NULL;
+                            current_tree->vector_of_roots[version+1] = aux;
+                        }
+                        else{
+                            aux = find_mod(n, version, R_SON);
+                            aux->return_pointers[0] = NULL;
+                            current_tree->vector_of_roots[version+1] = aux;
+                        }
+                    }
+                    else{
+                        remove_node_with_one_son(n);
+                        current_tree->vector_of_roots[version+1] = inicial_root;
+                        printf("Node %d was removed in version %d!\n", n->value, version+1);
+                    }
+                }
+                else{
+                    //caso o elemento tem dois filhos
+                    node *sucessor_n = successor(n->value, version, current_tree);
+                    //caso o successor é folha
+                    
+                    if(node_is_leaf(sucessor_n, version)){
+                        remove_leaf(sucessor_n->return_pointers[0], sucessor_n);
+                    }
+                    //caso o sucessor tem um único filho (não existe o caso onde o sucessor tem 2 filhos)
+                    else{
+                        remove_node_with_one_son(sucessor_n);
+                    }         
+                    if(n->value == inicial_root->value){
+                        inicial_root = sucessor_n;
+                    }
+                    else{
+                        node *father_n_lson = find_mod(father_n, version, L_SON);
+                    
+                        if((father_n_lson != NULL)&&(father_n_lson->value == n->value)){
+                            add_mod(father_n, sucessor_n, L_SON);
+                            n_is_lson_of_his_father = 1;
+                        }
+                        else{
+                            add_mod(father_n, sucessor_n, R_SON);
+                            n_is_rson_of_his_father = 1;
+                        }
+                    }
+                    //printf("AQUIIIIIIIII PORRAAA\n");
+                    sucessor_n->return_pointers[0] = father_n;
+                    
+
+                    //verificar se o filho é diferente do sucessor
+                    node *n_lson = find_mod(n, version, L_SON);
+                    if(n_lson->value != sucessor_n->value){
+                        n_lson->return_pointers[0] = sucessor_n;
+                        add_mod(sucessor_n, n_lson, L_SON);
+                    }
+                    else{ //ACHO QUE ESSE CASO NUNCA OCORRE POIS O SUCESSOR DO N NUNCA VAI SER ALGUÉM DA SUA SUBARVORE A ESQUERDA
+                        n_lson->return_pointers[0] = father_n;
+                        if(n_is_lson_of_his_father) add_mod(father_n, n_lson, L_SON);
+                        if(n_is_rson_of_his_father) add_mod(father_n, n_lson, R_SON);
+                    }
+                    
+                    node *n_rson = find_mod(n, version, R_SON);
+                    if(n_rson-> value != sucessor_n->value){
+                        n_rson->return_pointers[0] = sucessor_n;
+                        add_mod(sucessor_n, n_rson, R_SON);
+                    }
+                    else{
+                        n_rson->return_pointers[0] = father_n;
+                        if(n_is_lson_of_his_father) add_mod(father_n, n_rson, L_SON);
+                        if(n_is_rson_of_his_father) add_mod(father_n, n_rson, R_SON);
+                    }
+                
+                    current_tree->vector_of_roots[version+1] = inicial_root;
+                } 
+            }
+        }
+        //caso o elemento não exista na estrutura
+        else{ //esse else não é necessário
+            current_tree->vector_of_roots[version+1] = inicial_root;
+            printf("Node don't exist!\n");
+        }
+        //atualizando a versão independente de remover um nó ou não
+        version++;
+    }  
+}

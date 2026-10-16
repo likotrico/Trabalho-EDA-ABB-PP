@@ -37,8 +37,11 @@ node* create_node(int value){
     for(i=0;i<number_p;i++){
         n->return_pointers[i] = NULL;
     }
-    n->mods = (internal_info*)malloc(sizeof(internal_info)*2*number_p);
+    //LEMBRAR DE ALTERAR PARA O TAMANHO CORRETO
+    //n->mods = (internal_info*)malloc(sizeof(internal_info)*2*number_p);
+    n->mods = (internal_info*)malloc(sizeof(internal_info)*4);
     for(i=0; i<2*number_p;i++){
+    //for(i=0; i<4;i++){
         n->mods[i].version = -1;
         n->mods[i].value = NULL;
         n->mods[i].field = EMPTY;

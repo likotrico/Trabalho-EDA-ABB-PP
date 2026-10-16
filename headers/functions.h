@@ -20,5 +20,6 @@ node* find_strictly_greater(int, int, node*);
 int node_is_leaf(node*, int);
 node* successor(int, int, tree*);
 
+void remove(int , tree*);
 
 #endif

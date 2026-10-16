@@ -2,7 +2,7 @@
 #define STRUCTURES_H
 
 #include <vector>
-int number_p = 1;
+int number_p = 2;
 int next_id = 0;
 int version = 0;
 int maximum_versions = 1001;
