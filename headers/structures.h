@@ -2,11 +2,12 @@
 #define STRUCTURES_H
 
 #include <vector>
-int number_p = 2;
+int number_p = 1;
 int next_id = 0;
 int version = 0;
 int maximum_versions = 1001;
 std::vector<int> queue;
+int version_root_change = 0;
 //int *queue=(int*)malloc(sizeof(int)*1001);
 
 enum type_field{

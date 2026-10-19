@@ -11,8 +11,8 @@ void print_tree(tree*, int);
 
 void mod_overflow_UP(node*, node*, node*);
 void mod_overflow_DOWN(node*, node*, node*);
-node* clone_node(node*);
-void add_mod(node*, node* , type_field );
+node* clone_node(node*, tree*);
+void add_mod(node*, node* , type_field, tree*);
 void insert(node*, node*);
 void insert_node(int, tree*);
 

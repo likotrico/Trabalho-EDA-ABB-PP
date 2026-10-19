@@ -20,7 +20,7 @@ int main(int argc, char *argv[]){
     insert_node(7, tr);*/
 
     insert_node(10, tr);
-    insert_node(10, tr);
+    //insert_node(10, tr);
     insert_node(5, tr);
     insert_node(5, tr);
     insert_node(5, tr);
@@ -30,9 +30,9 @@ int main(int argc, char *argv[]){
     insert_node(9, tr);
     insert_node(6, tr);
     insert_node(7, tr);
-    insert_node(14, tr);
-    insert_node(16, tr);
-    insert_node(16, tr);
+    //insert_node(14, tr);
+    //insert_node(16, tr);
+    //insert_node(16, tr);
     
     //search(16, 7, tr);
     //print_tree(tr, 4);
@@ -41,23 +41,30 @@ int main(int argc, char *argv[]){
     /*n = successor(10, 2, tr);
     if(n != NULL) printf("sucessor: %d\n", n->value);
     else printf("sucessor: diff\n");*/
-    print_tree(tr, version);
+    //print_tree(tr, version);
 
+    //remove(10, tr);
+    //print_tree(tr, version);
+    //remove(10, tr);
+    //print_tree(tr, version);
+
+    //remove(14, tr);
+    //print_tree(tr, version);
+
+    //remove(15, tr);
+    //print_tree(tr, version);
+
+    
+
+    printf("\n");
+    printf("REMOVENDO KRL\n");
+    remove(5, tr);
     remove(10, tr);
-    print_tree(tr, version);
-    remove(10, tr);
-    print_tree(tr, version);
+    remove(8, tr);
+    remove(4, tr);
+    printf("\n");
 
-    remove(14, tr);
-    print_tree(tr, version);
-
-    remove(15, tr);
-    print_tree(tr, version);
-
-    remove(16, tr);
-    print_tree(tr, version);
-
-    printf("raiz mais atual:%d\n", tr->vector_of_roots[version]->value);
+    //printf("raiz mais atual:%d\n", tr->vector_of_roots[version]->value);
     /*for(i=0; i<2*number_p;i++){
         n = tr->vector_of_roots[7]->mods[i].value;
         if(n != NULL) printf("n:%d v:%d c:%d\n", n->value, tr->vector_of_roots[7]->mods[i].version, tr->vector_of_roots[7]->mods[i].field);
@@ -66,7 +73,13 @@ int main(int argc, char *argv[]){
         
     }*/
 
-    //print_tree(tr, 11);
+    for(i=1; i<=version; i++){
+        printf("Estrutura na versao:%d\n", i);
+        print_tree(tr, i);
+    }
+    //print_tree(tr, version-1);
+    //print_tree(tr, version);
+
 
     printf("\n");
     printf("END OF EXECUTION!");
