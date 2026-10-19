@@ -2,7 +2,49 @@
 
 #include "../headers/functions.h"
 
-node* search_node(int value, int version_req, node* no){
+node* read_node(node *current_node, int version_req){
+    node *n = (node*)malloc(sizeof(node));
+    int i;
+    n->value = current_node->value;
+    n->version = current_node->version;
+    
+    for(i=0; i<number_p;i++){
+        n->return_pointers[i] = current_node->return_pointers[i];    
+    }
+
+    n->l_son = current_node->l_son;
+    n->r_son = current_node->r_son;
+
+    for(i=0;i<2*number_p;i++){
+        if(current_node->mods[i].version > version_req) break;
+        if(current_node->mods[i].field == L_SON) n->l_son = current_node->mods[i].value;
+        if(current_node->mods[i].field == R_SON) n->r_son = current_node->mods[i].value;
+    }
+
+    return n;
+}
+
+void clear_node(node *current_node){
+    free(current_node);
+    current_node = NULL;
+}
+
+node* add_mod(node *current_node, node* value, type_field field){
+    //VERIFICANDO SE HÁ ESPAÇOS
+    int i;
+    for(i=0 ; i<2*number_p ; i++){
+        if(current_node->mods[i].field == EMPTY) break;
+    }
+    //SE HÁ ESPAÇO NOS MODS
+    if(i<2*number_p){
+        current_node->mods[i] = create_mod(value, field);
+        return current_node;
+    }
+    else{
+        return NULL;
+    }
+}
+/*node* search_node(int value, int version_req, node* no){
     //printf("valor chegou: %d", value);
     if(value <= 0 ){
         printf("Negative value\n");
@@ -51,8 +93,8 @@ void print_node(int value, node* root){ //FUNÇÃO OBSOLETA
 void mod_overflow_UP(node* current_node, node* new_node, node* old_node){
     //encontrar o campo que o current_node está 
     //adicionar a modificação do campo encontrado com a informação do new_node
-    if(current_node->l_son == old_node) add_mod(current_node, (int)new_node, L_SON);
-    if(current_node->r_son == old_node) add_mod(current_node, (int)new_node, R_SON);
+    if(current_node->l_son == old_node) add_mod(current_node, new_node, L_SON);
+    if(current_node->r_son == old_node) add_mod(current_node, new_node, R_SON);
 }
 
 void mod_overflow_DOWN(node* current_node, node* new_node, node* old_node){
@@ -76,7 +118,7 @@ node* clone_node(node *current_node){ //CLONO UM NÓ COM AS MODIFICAÇÕES VAZIA
     return novo_no;
 }
 
-void add_mod(node *current_node, int value, type_field field){
+node *add_mod(node *current_node, node *value, type_field field){
     //VERIFICANDO SE HÁ ESPAÇOS
     int i;
     for(i=0 ; i<2*number_p ; i++){
@@ -103,43 +145,9 @@ void add_mod(node *current_node, int value, type_field field){
     }
 }
 
-void insert(node *current_node, node *root){
-    if(current_node->value <= root->value){
-        if(root->l_son == NULL){
-            current_node->return_pointers[0] = root;
-            add_mod(root, (int)current_node ,L_SON);
-        }
-        else insert(current_node, root->l_son);   
-    }
-    else{
-        if(root->r_son == NULL){
-            current_node->return_pointers[0] = root;
-            add_mod(root, (int)current_node ,R_SON);
-        }
-        else insert(current_node, root->r_son);
-    }
-}
 
-void insert_node(int value, tree *t){
-    if(value <= 0) printf("Negative value can't be insert!\n");
-    else if(version+1 >= maximum_versions) printf("Maximum number of versions!\n");
-        
-    else{
-        node *n = create_node(value);
-        t->vector_of_roots[version+1] = t->vector_of_roots[version];
-        
-        //INSERINDO A RAIZ
-        if(t->vector_of_roots[version+1] == NULL){
-            t->vector_of_roots[version+1] = n;
-        }
-        //INSERINDO UM NÃO RAIZ
-        else{
-            insert(n, t->vector_of_roots[version+1]);
-        }
-        version++;
-        printf("node with value %d was sucessfully added in version %d\n", value, version);
-    }
-}
+
+
 
 /*int remove(){
 
