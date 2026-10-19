@@ -8,22 +8,36 @@
 #include "functions/sucessor.cpp"
 
 int main(){
-    
+    int i,j;
     tree *tr = create_tree();
-    insert_node(10, tr);
-    insert_node(5, tr);
-    insert_node(15, tr);
-    
-    /*node *n = read_node(tr->vector_of_roots[version], version);
-    if(n!=NULL){
-        printf("n:%d\n", n->value);
-        if(n->l_son!=NULL) printf("n_lson:%d\n", n->l_son->value);
-        else printf("n_lson:NULL\n");
+    int tam = 3;
+    int elementos[tam] = {10, 5, 15};
 
-        if(n->r_son!=NULL) printf("n_rson:%d\n", n->r_son->value);
-        else printf("n_rson:NULL\n");
-    }*/
+    //INSERINDO OS ELEMENTOS
+    for(i=0;i<tam;i++){
+        insert_node(elementos[i], tr);
+    }
+
+    //IMPRIMINDO TODAS AS VERSÕES
+    printf("\n");
+    for(i=0; i<=version;i++){
+        printf("Estrutura da árvore na versão %d\n", i);
+        print_order_tree(tr, i);
+    }
     
+    //TESTE DE SUCESSORES NAS VERSÕES
+    printf("\n");
+    node *n;
+    for(i=0; i<tam;i++){
+        for(j=0;j<=tam;j++){
+            n = successor(elementos[i], j, tr);
+            if(n!=NULL) printf("Sucessor de %d na versão %d é %d\n", elementos[i], j, n->value);
+            else printf("Sucessor de %d na versão %d não existe\n",elementos[i], j);
+        }
+    }
+
+    
+
     printf("\n");
     return 0;
 }

@@ -2,6 +2,7 @@
 
 #include "../headers/functions.h"
 
+//FUNÇÃO FAZ A LEITURA DO NÓ NA VERSÃO REQUERIDA
 node* read_node(node *current_node, int version_req){
     node *n = (node*)malloc(sizeof(node));
     int i;
@@ -29,6 +30,7 @@ void clear_node(node *current_node){
     current_node = NULL;
 }
 
+//FUNÇÃO QUE ADICIONA UMA MODIFICAÇÃO EM UM NÓ NO CAMPO REQUERIDO
 node* add_mod(node *current_node, node* value, type_field field){
     //VERIFICANDO SE HÁ ESPAÇOS
     int i;
@@ -40,10 +42,48 @@ node* add_mod(node *current_node, node* value, type_field field){
         current_node->mods[i] = create_mod(value, field);
         return current_node;
     }
+    //SE NÃO HÁ ESPAÇO NOS MODS
     else{
         return NULL;
     }
 }
+
+//FUNÇÃO RECURSIVA PARA INSERIR NA FILA OS ELEMENTOS EM ORDEM CRESCENTE
+void print_order(node *current_node, int version_req){
+    if(current_node == NULL) /*printf(" [Trying print null node!] ")*/;
+    else{
+        node *aux = read_node(current_node, version_req);
+
+        print_order(aux->l_son, version_req);
+        queue.push_back(current_node->value);
+        print_order(aux->r_son, version_req);
+
+        clear_node(aux);
+    }
+}
+
+//FUNÇÃO QUE IMPRIME A ESTRUTURA DA ÁRVORE NA VERSÃO REQUERIDA
+void print_order_tree(tree* current_tree, int version_req){ 
+    if(current_tree == NULL) printf("Trying print null tree!\n");
+    else if(version_req < 0) printf("Negative value in version parameter\n");
+    else if(version_req > version) printf("Trying print version %d, but the maximum version is %d\n", version_req, version);
+    else{
+        print_order(current_tree->vector_of_roots[version_req], version_req); //coda ainda
+        int i;
+        for(i=0; i<queue.size(); i++){
+            if(i == queue.size()-1) printf("%d", queue[i]);
+            else printf("%d, ", queue[i]);
+        }
+        queue.clear();
+        printf("\n");
+    }
+}
+
+int node_is_leaf(node *current_node){
+    if(current_node->l_son == NULL && current_node->r_son == NULL) return 1;
+    return 0;
+}
+
 /*node* search_node(int value, int version_req, node* no){
     //printf("valor chegou: %d", value);
     if(value <= 0 ){

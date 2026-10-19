@@ -1,9 +1,12 @@
 #ifndef STRUCTURES_H
 #define STRUCTURES_H
 
+#include <vector>
+
 int const number_p = 1;
 int version = 0;
 int const maximum_versions = 1001;
+std::vector<int> queue;
 
 enum type_field{
     EMPTY,

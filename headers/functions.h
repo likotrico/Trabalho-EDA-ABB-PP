@@ -23,4 +23,9 @@ void clear_node(node*);
 
 node* add_mod(node*, node*, type_field);
 
+void print_order(node *, int);
+void print_order_tree(tree*, int);
+
+int node_is_leaf(node*);
+
 #endif
