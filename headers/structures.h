@@ -35,7 +35,7 @@ struct tree{
     node *vector_of_roots[maximum_versions];
 };
 
-tree* create_tree();
+
 internal_info create_mod(node*, type_field);
 node* create_node(int);
 

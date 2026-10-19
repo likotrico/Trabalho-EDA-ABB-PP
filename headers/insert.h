@@ -4,7 +4,7 @@
 #include "structures.h"
 
 
-node* insert(node*, node*);
+node* insert(node*, node*, tree*);
 void insert_node(int, tree*);
 
 

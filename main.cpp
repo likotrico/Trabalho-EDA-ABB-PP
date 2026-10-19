@@ -10,14 +10,15 @@
 int main(){
     int i,j;
     tree *tr = create_tree();
-    int tam = 3;
-    int elementos[tam] = {10, 5, 15};
+    int tam = 6;
+    int elementos[tam] = {10, 5, 15, 1, 8, 6};
 
     //INSERINDO OS ELEMENTOS
     for(i=0;i<tam;i++){
         insert_node(elementos[i], tr);
     }
 
+    remove(5, tr);
     //IMPRIMINDO TODAS AS VERSÕES
     printf("\n");
     for(i=0; i<=version;i++){
@@ -26,7 +27,7 @@ int main(){
     }
     
     //TESTE DE SUCESSORES NAS VERSÕES
-    printf("\n");
+    /*printf("\n");
     node *n;
     for(i=0; i<tam;i++){
         for(j=0;j<=tam;j++){
@@ -34,10 +35,7 @@ int main(){
             if(n!=NULL) printf("Sucessor de %d na versão %d é %d\n", elementos[i], j, n->value);
             else printf("Sucessor de %d na versão %d não existe\n",elementos[i], j);
         }
-    }
-
-    
-
+    }*/
     printf("\n");
     return 0;
 }

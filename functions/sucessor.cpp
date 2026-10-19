@@ -20,7 +20,7 @@ node* successor(int value, int version_req, tree *current_tree){
         //o elemento de valor value existe na estrutura
         if(aux->value == value){
             //caso elemento é folha
-            if(node_is_leaf(aux)) return last_left; //codar função
+            if(node_is_leaf(aux, version_req)) return last_left; //codar função
             //caso elemento não é folha
             else{
                 //caso filho direito é nulo
