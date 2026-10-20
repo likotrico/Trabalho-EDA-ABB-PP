@@ -10,21 +10,20 @@
 int main(){
     int i,j;
     tree *tr = create_tree();
-    int tam = 6;
-    int elementos[tam] = {10, 5, 15, 1, 8, 6};
+    int tam = 10;
+    int elementos[tam] = {10, 9, 8, 7, 6, 5, 4, 3, 2, 1};
 
     //INSERINDO OS ELEMENTOS
-    for(i=0;i<tam;i++){
-        insert_node(elementos[i], tr);
-    }
+    //for(i=0;i<tam;i++){
+    //    insert_node(elementos[i], tr);
+    //}
 
-    remove(5, tr);
     //IMPRIMINDO TODAS AS VERSÕES
-    printf("\n");
+    /*printf("\n");
     for(i=0; i<=version;i++){
         printf("Estrutura da árvore na versão %d\n", i);
         print_order_tree(tr, i);
-    }
+    }*/
     
     //TESTE DE SUCESSORES NAS VERSÕES
     /*printf("\n");

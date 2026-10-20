@@ -3,21 +3,6 @@
 
 #include "structures.h"
 
-//node* search_node(int, int, node*);
-//void search(int, int, tree*); 
-//void print_node(int, node* ); //FUNÇÃO OBSOLETA
-
-//void mod_overflow_UP(node*, node*, node*);
-//void mod_overflow_DOWN(node*, node*, node*);
-//node* clone_node(node*);
-
-//void insert(node*, node*);
-//void insert_node(int, tree*);
-
-
-//node* add_mod(node*, node* , type_field);
-
-
 node* read_node(node*, int);
 void clear_node(node*);
 

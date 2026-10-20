@@ -3,9 +3,19 @@
 #include "../headers/sucessor.h"
 
 node* add_unknown_mod(node *current_node, node *new_node, node *old_node, tree *current_tree){
+    if(current_node == NULL){
+        current_tree->vector_of_roots[version+1] = new_node;
+        return NULL;
+    }
     node *n = read_node(current_node, version);
-    if(n->l_son == old_node) return add_mod(current_node, new_node, L_SON, current_tree);
-    else return add_mod(current_node, new_node, R_SON, current_tree);
+    if(n->l_son == old_node){
+        clear_node(n);
+        return add_mod(current_node, new_node, L_SON, current_tree);
+    }
+    else{
+        clear_node(n);
+        return add_mod(current_node, new_node, R_SON, current_tree);
+    }
 }
 
 int has_only_son(node *current_node, int version_req){
@@ -84,24 +94,28 @@ void remove(int value, tree *current_tree){
 
                 if(aux->r_son != NULL) aux->r_son->return_pointers[0] = sucessor_node->return_pointers[0];
                 node *most_updated_r_son = add_unknown_mod_to_remove(sucessor_node->return_pointers[0], aux->r_son, sucessor_node, node_to_remove, current_tree);
+                
 
                 node *aux_2 = read_node(node_to_remove, version);
+
+                if(most_updated_r_son == NULL) most_updated_r_son = aux_2->r_son;
+
                 if(aux_2->l_son != NULL) aux_2->l_son->return_pointers[0] = sucessor_node;
                 if(most_updated_r_son != NULL) most_updated_r_son->return_pointers[0] = sucessor_node;
 
                 sucessor_node->return_pointers[0] = node_to_remove->return_pointers[0];
 
                 node *most_updated_sucessor_node = add_mod(sucessor_node, aux_2->l_son, L_SON, current_tree);
-                add_mod(most_updated_sucessor_node, most_updated_r_son, R_SON, current_tree);
+                most_updated_sucessor_node = add_mod(most_updated_sucessor_node, most_updated_r_son, R_SON, current_tree);
 
                 //node *mod_overflow_UP(node *current_node, node *new_son, node *old_son, tree *current_tree){
                 //(node *current_node, node *new_node, node *old_node, tree *current_tree){
                 add_unknown_mod(sucessor_node->return_pointers[0], most_updated_sucessor_node, node_to_remove, current_tree);
+                clear_node(aux);
+                clear_node(aux_2);
             }
         }
-        else{
-
-        }
     }
+    
     version++;
 }
