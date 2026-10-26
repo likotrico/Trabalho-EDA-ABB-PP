@@ -1,6 +1,6 @@
 #include "../headers/structures.h"
 
-//CRIA A ESTRUTURA ÁRVORE
+//CRIA A ESTRUTURA DA ÁRVORE E A RETORNA.
 tree* create_tree(){
     tree* t = (tree*)malloc(sizeof(tree));
     int i;
@@ -10,7 +10,7 @@ tree* create_tree(){
     return t;
 }
 
-//CRIA A ESTRUTURA INTERNA DA MODIFICAÇÃO
+//CRIA A ESTRUTURA INTERNA DA MODIFICAÇÃO E A RETORNA.
 internal_info create_mod(node *value, type_field field){
     internal_info f;
     f.version = version+1;
@@ -20,7 +20,7 @@ internal_info create_mod(node *value, type_field field){
     return f;
 }
 
-//CRIA UM NOVO NÓ
+//CRIA UM NOVO NÓ E O RETORNA.
 node* create_node(int value){
     int i;
     node *n;

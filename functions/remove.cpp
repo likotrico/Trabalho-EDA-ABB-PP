@@ -2,6 +2,8 @@
 #include "../headers/functions.h"
 #include "../headers/sucessor.h"
 
+//FUNÇÃO MODIFICA NÓS DE BAIXO PARA CIMA, PARTINDO DO NÓ A SER REMOVIDO. (CASO QUE O NÓ A SER REMOVIDO É FOLHA OU POSSUI APENAS UM FILHO)
+//RETORNA O PAI MAIS ATUALIZADO E NULL CASO O NÓ ATUAL FOR NULL.
 node* add_unknown_mod(node *current_node, node *new_node, node *old_node, tree *current_tree){
     if(current_node == NULL){
         current_tree->vector_of_roots[version+1] = new_node;
@@ -18,12 +20,15 @@ node* add_unknown_mod(node *current_node, node *new_node, node *old_node, tree *
     }
 }
 
+//FUNÇÃO QUE VERIFICA SE UM NÓ POSSUI APENAS UM FILHO.
 int has_only_son(node *current_node, int version_req){
     node *aux = read_node(current_node, version_req);
     if((aux->l_son == NULL && aux->r_son != NULL) || (aux->l_son != NULL && aux->r_son == NULL)) return 1;
     return 0;
 }
 
+//FUNÇÃO MODIFICA NÓS DE BAIXO PARA CIMA, PARTINDO DO SUCESSOR.
+//RETORNA O ÚLTIMO NÓ MODIFICADO/CLONADO OU QUANDO CHEGA NO NÓ A SER REMOVIDO.
 node* add_unknown_mod_to_remove(node *current_node, node *new_node, node *old_node, node* node_to_stop, tree *current_tree){
     if(current_node == node_to_stop) return new_node;
     node *n = read_node(current_node, version);
@@ -31,6 +36,8 @@ node* add_unknown_mod_to_remove(node *current_node, node *new_node, node *old_no
     else return add_mod_to_remove(current_node, new_node, R_SON, node_to_stop, current_tree);
 }
 
+//FUNÇÃO AUXILIAR NO PROCESSO DE REMOÇÃO DE UM NÓ QUE ATUALIZA O PAI DE UM NÓ QUE FOI CLONADO.
+//RETORNA O ÚLTIMO NÓ MODIFICADO/CLONADO OU QUANDO CHEGA NO NÓ A SER REMOVIDO.
 node* add_mode_to_remove_overflowUP(node *current_node, node *new_son, node *old_son, node* node_to_stop, tree *current_tree){
     if(current_node == node_to_stop) return new_son;
     node *aux=read_node(current_node, version);
@@ -39,6 +46,8 @@ node* add_mode_to_remove_overflowUP(node *current_node, node *new_son, node *old
     return NULL;
 }
 
+//FUNÇÃO AUXILIAR NO PROCESSO DE REMOÇÃO QUE ADICIONA UMA MODIFICAÇÃO EM DADO CAMPO ENTRE OS NÓS ENTRE O SUCESSOR E O NÓ A SER REMOVIDO.
+//RETORNA O ÚLTIMO NÓ MODIFICADO/CLONADO OU QUANDO CHEGA NO NÓ A SER REMOVIDO.
 node* add_mod_to_remove(node *current_node, node *new_son, type_field field, node* node_to_stop, tree *current_tree){
     //node *current_node, node* value, type_field field, tree *current_tree
     if(current_node == node_to_stop) return new_son;
@@ -63,6 +72,7 @@ node* add_mod_to_remove(node *current_node, node *new_son, type_field field, nod
     }
 }
 
+//FUNÇÃO QUE REMOVE DA ÁRVORE UM NÓ COM VALOR INFORMADO.
 void remove(int value, tree *current_tree){
     if(current_tree == NULL || value <= 0 ){
         printf("Invalid Entry!\n");
@@ -78,7 +88,7 @@ void remove(int value, tree *current_tree){
                 add_unknown_mod(node_to_remove->return_pointers[0], NULL, node_to_remove, current_tree);
             }
             //CASO NÃO É FOLHA E TEM APENAS UM FILHO
-            else if(has_only_son(node_to_remove, version)){
+            ÁRVORE QUE REPRESENTA UMA    else if(has_only_son(node_to_remove, version)){
                 node *aux = read_node(node_to_remove, version);
                 if(aux->l_son != NULL){
                     add_unknown_mod(node_to_remove->return_pointers[0], aux->l_son, node_to_remove, current_tree);
@@ -94,23 +104,17 @@ void remove(int value, tree *current_tree){
 
                 if(aux->r_son != NULL) aux->r_son->return_pointers[0] = sucessor_node->return_pointers[0];
                 node *most_updated_r_son = add_unknown_mod_to_remove(sucessor_node->return_pointers[0], aux->r_son, sucessor_node, node_to_remove, current_tree);
-                
-
                 node *aux_2 = read_node(node_to_remove, version);
 
                 if(most_updated_r_son == NULL) most_updated_r_son = aux_2->r_son;
-
                 if(aux_2->l_son != NULL) aux_2->l_son->return_pointers[0] = sucessor_node;
                 if(most_updated_r_son != NULL) most_updated_r_son->return_pointers[0] = sucessor_node;
 
                 sucessor_node->return_pointers[0] = node_to_remove->return_pointers[0];
-
                 node *most_updated_sucessor_node = add_mod(sucessor_node, aux_2->l_son, L_SON, current_tree);
                 most_updated_sucessor_node = add_mod(most_updated_sucessor_node, most_updated_r_son, R_SON, current_tree);
-
-                //node *mod_overflow_UP(node *current_node, node *new_son, node *old_son, tree *current_tree){
-                //(node *current_node, node *new_node, node *old_node, tree *current_tree){
                 add_unknown_mod(sucessor_node->return_pointers[0], most_updated_sucessor_node, node_to_remove, current_tree);
+                
                 clear_node(aux);
                 clear_node(aux_2);
             }

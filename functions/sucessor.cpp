@@ -1,5 +1,6 @@
 #include "../headers/sucessor.h"
 
+//FUNÇÃO AUXILIAR QUE ENCONTRA O SUCESSOR DE UM NÓ. RETORNA O NÓ QUE É SUCESSOR E NULL CASO CONTRÁRIO.
 node* find_strictly_greater(int value, int version_req, node *current_node){
     if(current_node == NULL) return NULL;
     node *aux = read_node(current_node, version_req);
@@ -7,7 +8,7 @@ node* find_strictly_greater(int value, int version_req, node *current_node){
     return find_strictly_greater(value, version_req, aux->l_son); //caso em que ainda não chegamos no elementos mais a esquerda
 }
 
-//FUNÇÃO QUE RETORNA O NÓ SUCESSOR DE UM VALOR EM UMA DADA VERSÃO NA ESTRUTURA
+//FUNÇÃO QUE RETORNA O NÓ SUCESSOR DE UM VALOR EM UMA DADA VERSÃO NA ESTRUTURA. RETORNA O NÓ QUE É SUCESSOR E NULL CASO CONTRÁRIO.
 node* successor(int value, int version_req, tree *current_tree){
     node *aux, *last_left;
     node *current_node = current_tree->vector_of_roots[version_req];
@@ -41,13 +42,13 @@ node* successor(int value, int version_req, tree *current_tree){
     return last_left;
 }
 
-//FUNÇÃO QUE IMPRIME O VALOR DO SUCESSOR DE UM VALOR EM UMA DADA VERSÃO NA ESTRUTURA
+//FUNÇÃO QUE IMPRIME O VALOR DO SUCESSOR DE UM VALOR EM UMA DADA VERSÃO NA ESTRUTURA.
 void successor_tree(int value, int version_req, tree *current_tree){
     if(current_tree == NULL || value <= 0 || version_req < 0 || version_req > version) printf("Invalid Entry!\n");
     node *n = successor(value, version_req, current_tree);
     if(n!=NULL){
-        printf("sucessor de %d na versão %d é %d\n", value, version_req, n->value);
-        //printf("%d\n", n->value);
+        //printf("sucessor de %d na versão %d é %d\n", value, version_req, n->value);
+        printf("%d\n", n->value);
     }
     else printf("inf\n");
 }

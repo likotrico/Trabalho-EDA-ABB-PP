@@ -1,6 +1,8 @@
 #include "../headers/insert.h"
 #include "../headers/functions.h"
 
+//FUNÇÃO AUXILIAR QUE RECEBE COMO ENTRADA UM NÓ A SER ADICIONADO E UM NÓ QUE SERÁ O POSSÍVEL PAI DO PRIMEIRO.
+//RETORNA O NÓ INSERIDO.
 node* insert(node *new_node, node *current_node, tree *current_tree){
     node *aux_node = read_node(current_node, version);
     node *return_node;
@@ -24,6 +26,7 @@ node* insert(node *new_node, node *current_node, tree *current_tree){
     return return_node;
 }
 
+//A FUNÇÃO QUE RECEBE COMO ENTRADA UM VALOR PARA ADICIONAR EM UMA ABB COM PERSISTÊNCIA PARCIAL.
 void insert_node(int value, tree *current_tree){
     if(value <= 0) printf("Negative value can't be insert!\n");
     else if(version+1 >= maximum_versions) printf("Maximum number of versions!\n");

@@ -2,7 +2,8 @@
 
 #include "../headers/functions.h"
 
-//FUNÇÃO FAZ A LEITURA DO NÓ NA VERSÃO REQUERIDA
+//FUNÇÃO FAZ A LEITURA DO NÓ NA VERSÃO REQUERIDA.
+//RETORNA O NÓ NA VERSÃO REQUERIDA COM OS FILHOS ATUALIZADOS.
 node* read_node(node *current_node, int version_req){
     node *n = (node*)malloc(sizeof(node));
     int i;
@@ -31,23 +32,27 @@ node* read_node(node *current_node, int version_req){
     return n;
 }
 
+//LIMPA A MEMÓRIA DE UM NÓ.
 void clear_node(node *current_node){
     free(current_node);
     current_node = NULL;
 }
 
+//CLONA UM NÓ, CUJO OS MODIFICADORES ESTÃO CHEIOS.
 node *clone_node(node *current_node){
     node *new_node = read_node(current_node, version);
     new_node->version = version+1;
     return new_node;
 }
 
+//FUNÇÃO AUXILIAR QUE ATUALIZA OS PONTEIROS DE RETORNO DOS FILHOS DE UM NÓ CLONADO.
 void mod_overflow_DOWN(node *current_node, node *new_father, node *old_father){
     int i;
     for(i=0;i<number_p;i++){
         if(current_node->return_pointers[i] == old_father) current_node->return_pointers[i] = new_father;
     }
 }
+
 
 node *mod_overflow_UP(node *current_node, node *new_son, node *old_son, tree *current_tree){
     node *aux=read_node(current_node, version);
