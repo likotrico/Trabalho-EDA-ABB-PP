@@ -39,6 +39,7 @@ void clear_node(node *current_node){
 }
 
 //CLONA UM NÓ, CUJO OS MODIFICADORES ESTÃO CHEIOS.
+//RETORNA O NÓ CLONADO.
 node *clone_node(node *current_node){
     node *new_node = read_node(current_node, version);
     new_node->version = version+1;
@@ -53,7 +54,8 @@ void mod_overflow_DOWN(node *current_node, node *new_father, node *old_father){
     }
 }
 
-
+//FUNÇÃO AUXILIAR QUE ADICIONA UMA MODIFICAÇÃO EM UM NÓ, SUBSTITUINDO UM NÓ DE UM CAMPO DESCONHECIDO POR UM NOVO NÓ NO CAMPO ENCONTRADO.
+//RETORNA O NÓ QUE RECEBEU A MODIFICAÇÃO.
 node *mod_overflow_UP(node *current_node, node *new_son, node *old_son, tree *current_tree){
     node *aux=read_node(current_node, version);
     if(aux->l_son == old_son) return add_mod(current_node, new_son, L_SON, current_tree);
@@ -61,12 +63,14 @@ node *mod_overflow_UP(node *current_node, node *new_son, node *old_son, tree *cu
     return NULL;
 }
 
+//FUNÇÃO AUXILIAR QUE SUBSTITUI A RAIZ NA VERSÃO MAIS ATUALIZADA.
+//RETORNA O NÓ QUE É A NOVA RAIZ.
 node *mod_overflow_UP_ROOT(tree *current_tree, node *new_root){
     current_tree->vector_of_roots[version+1] = new_root;
     return new_root;
 }
 
-//FUNÇÃO QUE ADICIONA UMA MODIFICAÇÃO EM UM NÓ NO CAMPO REQUERIDO
+//FUNÇÃO QUE ADICIONA UMA MODIFICAÇÃO EM UM NÓ NO CAMPO REQUERIDO.
 node* add_mod(node *current_node, node* value, type_field field, tree *current_tree){
     //VERIFICANDO SE HÁ ESPAÇOS
     int i;
@@ -130,6 +134,7 @@ void print_order_tree(tree* current_tree, int version_req){
     }
 }
 
+//FUNÇÃO QUE VERIFICA SE UM NÓ É FOLHA.
 int node_is_leaf(node *current_node, int version_req){
     node *aux = read_node(current_node, version_req);
     if(aux->l_son == NULL && aux->r_son == NULL){
@@ -140,6 +145,8 @@ int node_is_leaf(node *current_node, int version_req){
     return 0;
 }
 
+//FUNÇÃO QUE PROCURA NA ESTRUTURA UM NÓ NA VERSÃO REQUERIDA.
+//RETORNAR O NÓ ENCONTRADO E NULL CASO NÃO EXISTA.
 node *search_node(int value, int version_req, tree *current_tree){
     if(current_tree == NULL) return NULL;
     if(value < 0) return NULL;
