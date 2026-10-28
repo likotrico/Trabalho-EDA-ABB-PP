@@ -44,6 +44,6 @@ void insert_node(int value, tree *current_tree){
             insert(n, current_tree->vector_of_roots[version+1], current_tree);
         }
         version++;
-        printf("node with value %d was sucessfully added in version %d\n", value, version);
+        //printf("node with value %d was sucessfully added in version %d\n", value, version);
     }
 }

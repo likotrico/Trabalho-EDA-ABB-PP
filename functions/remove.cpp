@@ -88,7 +88,7 @@ void remove(int value, tree *current_tree){
                 add_unknown_mod(node_to_remove->return_pointers[0], NULL, node_to_remove, current_tree);
             }
             //CASO NÃO É FOLHA E TEM APENAS UM FILHO
-            ÁRVORE QUE REPRESENTA UMA    else if(has_only_son(node_to_remove, version)){
+            else if(has_only_son(node_to_remove, version)){
                 node *aux = read_node(node_to_remove, version);
                 if(aux->l_son != NULL){
                     add_unknown_mod(node_to_remove->return_pointers[0], aux->l_son, node_to_remove, current_tree);

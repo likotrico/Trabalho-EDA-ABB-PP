@@ -121,7 +121,16 @@ void print_order(node *current_node, int version_req){
 void print_order_tree(tree* current_tree, int version_req){ 
     if(current_tree == NULL) printf("Trying print null tree!\n");
     else if(version_req < 0) printf("Negative value in version parameter\n");
-    else if(version_req > version) printf("Trying print version %d, but the maximum version is %d\n", version_req, version);
+    else if(version_req > version){
+        print_order(current_tree->vector_of_roots[version], version); //coda ainda
+        int i;
+        for(i=0; i<queue.size(); i++){
+            if(i == queue.size()-1) printf("%d", queue[i]);
+            else printf("%d, ", queue[i]);
+        }
+        queue.clear();
+        printf("\n");
+    }
     else{
         print_order(current_tree->vector_of_roots[version_req], version_req); //coda ainda
         int i;

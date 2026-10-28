@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <iostream>
 
 #include "functions/functions.cpp"
 #include "functions/structures.cpp"
@@ -7,34 +8,33 @@
 #include "functions/remove.cpp"
 #include "functions/sucessor.cpp"
 
-int main(){
-    int i,j;
+using namespace std;
+
+int main(void){
     tree *tr = create_tree();
-    int tam = 10;
-    int elementos[tam] = {10, 9, 8, 7, 6, 5, 4, 3, 2, 1};
 
-    //INSERINDO OS ELEMENTOS
-    //for(i=0;i<tam;i++){
-    //    insert_node(elementos[i], tr);
-    //}
+    string func;
+    int val, ver;
 
-    //IMPRIMINDO TODAS AS VERSÕES
-    /*printf("\n");
-    for(i=0; i<=version;i++){
-        printf("Estrutura da árvore na versão %d\n", i);
-        print_order_tree(tr, i);
-    }*/
-    
-    //TESTE DE SUCESSORES NAS VERSÕES
-    /*printf("\n");
-    node *n;
-    for(i=0; i<tam;i++){
-        for(j=0;j<=tam;j++){
-            n = successor(elementos[i], j, tr);
-            if(n!=NULL) printf("Sucessor de %d na versão %d é %d\n", elementos[i], j, n->value);
-            else printf("Sucessor de %d na versão %d não existe\n",elementos[i], j);
+    while()cin >> func{
+        if(func == "INC"){
+            cin >> val;
+            insert_node(val, tr);
+        }else if(func == "REM") {
+            cin >> val;
+            remove(val, tr);
+        }else if(func == "SUC"){
+            cin >> val >> ver;
+
+            cout << func << " " << val << " " << ver << "\n";
+            successor_tree(val, ver, tr);
+        }else if(func == "IMP"){
+            cin >> ver;
+
+            cout << func << " " << ver << "\n";
+            print_order_tree(tr, ver);
         }
-    }*/
-    printf("\n");
+    }
+    
     return 0;
 }
