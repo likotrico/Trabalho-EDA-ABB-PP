@@ -1,6 +1,7 @@
 # Estrutura de Dados Avançadas - Trabalho 01
 
 Igor Torquato Maia Sales - 603155
+
 Murillo Inácio da Costa Silva - 603284
 
 # Árvore Binária de Busca com Persistência Parcial
