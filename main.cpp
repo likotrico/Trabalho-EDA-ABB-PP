@@ -16,7 +16,7 @@ int main(void){
     string func;
     int val, ver;
 
-    while()cin >> func{
+    while(cin >> func){
         if(func == "INC"){
             cin >> val;
             insert_node(val, tr);
