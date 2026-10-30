@@ -1,4 +1,4 @@
-INPUT = 'testes/teste01.in'
+INPUT = 'teste/entrada/teste01.in'
 
 # Pastas usadas nos testes.
 DIR_ENTRADA   = teste/entrada
